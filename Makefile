@@ -1,6 +1,6 @@
 .PHONY:
 run: image
-	qemu-system-x86_64 image
+	qemu-system-x86_64 -drive format=raw,file=image
 
 IMAGE_SIZE = 33280
 image: boot_sector.bin stage1.lisp
