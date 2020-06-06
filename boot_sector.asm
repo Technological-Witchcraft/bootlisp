@@ -1,9 +1,14 @@
 ;;; -*- mode: nasm; -*-
 [bits 16]
 [org 0x7c00]
+        stack_base equ 0xFFFFF
         boot_device equ 0x500
         first_slot equ boot_device + 2
         second_slot equ first_slot + 5
+
+        mov bp, stack_base      ; Set up the stack
+        mov sp, bp
+
         mov [boot_device], dl
         mov bx, msg
         call print_string
