@@ -5,6 +5,8 @@
         boot_device equ 0x500
         first_slot equ boot_device + 2
         second_slot equ first_slot + 5
+        start_point equ 0x7c00
+        sector_size equ 512
 
         mov ebp, stack_base     ; Set up the stack
         mov esp, ebp
@@ -17,6 +19,16 @@
         call format_hex
         mov byte [first_slot + 4], 0
         call print_string
+
+        mov ah, 0x02            ; BIOS read sector function
+        ; mov dl, [boot_device] ; Seeing as we haven't clobbered `DL` yet, ; Drive number
+        ; let's not bother doing this read.
+        mov ch, 0               ; Cylinder number
+        mov dh, 0               ; Track number
+        mov cl, 0               ; Sector number
+        mov al, 32              ; Number of sectors
+        mov bx, start_point + sector_size ; Address to read to
+        int 0x13
 
         jmp $
 ;; Functions:
