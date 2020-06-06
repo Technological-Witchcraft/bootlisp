@@ -60,7 +60,7 @@ format_hex:
         __format_hex_digit 0
         popa
         ret
-;;; Print null terminating string with address `BX`
+;;; Print null terminating string with address `SI`
 print_string:
         pusha
         mov ah, 0x0e            ; scrolling teletype BIOS routine
