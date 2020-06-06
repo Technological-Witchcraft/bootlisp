@@ -1,7 +1,7 @@
 ;;; -*- mode: nasm; nasm-basic-offset: 3; tab-width: 3; indent-tabs-mode: t; -*-
 [bits 16]
 [org 0x7c00]
-	stack_base equ 0x7c00
+	stack_base equ 0x7FFFF
 	boot_device equ 0x500
 	first_slot equ boot_device + 2
 	second_slot equ first_slot + 5
