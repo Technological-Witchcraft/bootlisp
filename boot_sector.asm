@@ -6,8 +6,8 @@
         first_slot equ boot_device + 2
         second_slot equ first_slot + 5
 
-        mov bp, stack_base      ; Set up the stack
-        mov sp, bp
+        mov ebp, stack_base      ; Set up the stack
+        mov esp, ebp
         mov [boot_device], dl   ; Save boot device
 
         mov bx, msg
