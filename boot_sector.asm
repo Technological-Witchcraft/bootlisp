@@ -1,12 +1,15 @@
 ;;; -*- mode: nasm; nasm-basic-offset: 3; tab-width: 3; indent-tabs-mode: t; -*-
 [bits 16]
 [org 0x7c00]
-	stack_base equ 0x7FFF
-	boot_device equ 0x500
-	first_slot equ boot_device + 2
-	second_slot equ first_slot + 5
-	start_point equ 0x7c00
 	sector_size equ 512
+	prelude_start equ 0x0500 	  ; Size: 28 KiB
+	sysinfo_start equ 0x7500	  ; Size: 1.75 KiB
+	interpr_start equ 0x7c00	  ; Size: 512 B
+	inbuffr_start equ 0x7e00	  ; Size: 4 KiB
+	heap_start    equ 0x8e00	  ; Size: 476.5 KiB
+	stack_base equ sysinfo_start + (sector_size * 2)
+	boot_device equ sysinfo_start
+	hex_test_buf equ heap_start + 2
 
 	mov bp, stack_base     ; Set up the stack
 	mov sp, bp
@@ -14,11 +17,11 @@
 
 	mov si, msg
 	call print_string
-	mov si, first_slot
+	mov si, hex_test_buf
 	mov ax, 0xbeef
-	mov di, first_slot
+	mov di, hex_test_buf
 	call format_hex
-	mov byte [first_slot + 4], 0
+	mov byte [hex_test_buf + 4], 0
 	call print_string
 
 	mov ax, 0x0240                    ; BIOS read sector function, 64 sectors
@@ -26,7 +29,7 @@
 	; let's not bother doing this read.
 	mov cx, 2                         ; Cylinder number 0, sector number 1
 	xor dh, dh                        ; Track number 0
-	mov bx, start_point + sector_size ; Address to read to
+	mov bx, interpr_start + sector_size ; Address to read to
 	int 0x13
 
 	jmp $
