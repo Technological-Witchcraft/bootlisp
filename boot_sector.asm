@@ -26,7 +26,7 @@
         mov ch, 0               ; Cylinder number
         mov dh, 0               ; Track number
         mov cl, 2               ; Sector number (starts at 1)
-        mov al, 32              ; Number of sectors
+        mov al, 64              ; Number of sectors
         mov bx, start_point + sector_size ; Address to read to
         int 0x13
 
