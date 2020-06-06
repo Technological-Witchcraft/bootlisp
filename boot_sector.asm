@@ -1,12 +1,12 @@
 ;;; -*- mode: nasm; -*-
 [bits 16]
 [org 0x7c00]
-        stack_base equ 0xFFFFF
+        stack_base equ 0x7FFFF
         boot_device equ 0x500
         first_slot equ boot_device + 2
         second_slot equ first_slot + 5
 
-        mov ebp, stack_base      ; Set up the stack
+        mov word ebp, stack_base      ; Set up the stack
         mov esp, ebp
         mov [boot_device], dl   ; Save boot device
 
