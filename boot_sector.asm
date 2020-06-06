@@ -26,10 +26,10 @@ format_hex:
         shr dx, (%1 * 4)
         cmp dx, 9
         jnc %%letter
-        add dx, 48              ; 48 = '0' in ASCII
+        add dx, '0'
         jmp %%end
         %%letter:
-        add dx, 87              ; 10 + 87 = 'a' in ASCII
+        add dx, 'a' - 10
         %%end:
         mov [bx], dl
 %endmacro
