@@ -8,13 +8,13 @@
         start_point equ 0x7c00
         sector_size equ 512
 
-        mov ebp, stack_base     ; Set up the stack
-        mov esp, ebp
+        mov bp, stack_base     ; Set up the stack
+        mov sp, bp
         mov [boot_device], dl   ; Save boot device
 
-        mov bx, msg
+        mov si, msg
         call print_string
-        mov bx, first_slot
+        mov si, first_slot
         mov ax, 0xbeef
         call format_hex
         mov byte [first_slot + 4], 0
@@ -49,14 +49,14 @@ format_hex:
         %%letter:
         add dx, 'a' - 10
         %%end:
-        mov [bx], dl
+        mov [si], dl
 %endmacro
         __format_hex_digit 3
-        add bx, 1
+        inc si
         __format_hex_digit 2
-        add bx, 1
+        inc si
         __format_hex_digit 1
-        add bx, 1
+        inc si
         __format_hex_digit 0
         popa
         ret
@@ -65,15 +65,15 @@ print_string:
         pusha
         mov ah, 0x0e            ; scrolling teletype BIOS routine
 __print_string_loop:
-        mov al, [bx]
-        cmp al, 0
-        je __print_string_exit
+        lodsb
+        test al, al
+        jz __print_string_exit
         int 0x10                ; ISR 0x10 for screen BIOS routines
-        add bx, 1
         jmp __print_string_loop
 __print_string_exit:
         popa
         ret
+
 ;; Data:
 msg: db 'Hello, world!', 0
         times 510-($-$$) db 0   ; pad to end of sector
