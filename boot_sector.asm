@@ -8,8 +8,8 @@
 
         mov bp, stack_base      ; Set up the stack
         mov sp, bp
+        mov [boot_device], dl   ; Save boot device
 
-        mov [boot_device], dl
         mov bx, msg
         call print_string
         mov bx, first_slot
@@ -17,6 +17,7 @@
         call format_hex
         mov byte [first_slot + 4], 0
         call print_string
+
         jmp $
 ;; Functions:
 ;;; Write content of register `AX` formatted as hexadecimal at address `BX`
